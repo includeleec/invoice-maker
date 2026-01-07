@@ -33,6 +33,7 @@
     "nanoid": "^5.1.6",
     "source-map-js": "^1.2.1",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.54.0"
   }
 }
