@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "pages:build": "pnpm exec next-on-pages",
-    "pages:deploy": "pnpm run pages:build && pnpm exec wrangler pages deploy .vercel/output/static",
+    "pages:deploy": "pnpm run pages:build && pnpm exec wrangler deploy",
     "deploy": "pnpm run pages:deploy"
   },
   "dependencies": {
