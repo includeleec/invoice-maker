@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Invoice, InvoiceItem } from '@/types/invoice';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
+import { Textarea } from '@/components/ui/Textarea';
 import { Trash2, Plus, Upload, Save, Eye } from 'lucide-react';
 import { v4 as uuidv4 } from 'uuid'; // I need to install uuid or just use crypto.randomUUID
 
@@ -322,14 +323,14 @@ export const InvoiceForm = ({
                 </div>
                 <div className="space-y-4">
                     {invoice.items.map((item, index) => (
-                        <div key={item.id} className="flex gap-4 items-end bg-slate-50/50 p-4 rounded-2xl border border-slate-100 group transition-all hover:bg-white hover:shadow-lg hover:shadow-slate-200/50">
+                        <div key={item.id} className="flex gap-4 items-start bg-slate-50/50 p-4 rounded-2xl border border-slate-100 group transition-all hover:bg-white hover:shadow-lg hover:shadow-slate-200/50">
                             <div className="flex-grow">
                                 <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block px-1">Description</label>
-                                <Input
+                                <Textarea
                                     value={item.description}
                                     onChange={e => updateItem(index, 'description', e.target.value)}
                                     placeholder="Consultancy Services"
-                                    className="bg-transparent border-transparent hover:border-slate-100 focus:bg-white"
+                                    className="bg-transparent border-transparent hover:border-slate-100 focus:bg-white min-h-[48px]"
                                 />
                             </div>
                             <div className="w-24">
@@ -386,11 +387,12 @@ export const InvoiceForm = ({
                                     onChange={e => updatePaymentMethod(index, 'label', e.target.value)}
                                     placeholder="Wire Transfer"
                                 />
-                                <Input
+                                <Textarea
                                     label="Account Details"
                                     value={method.details}
                                     onChange={e => updatePaymentMethod(index, 'details', e.target.value)}
                                     placeholder="IBAN: GB..."
+                                    className="resize-none"
                                 />
                             </div>
                             <Button

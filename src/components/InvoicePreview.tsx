@@ -32,7 +32,7 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
 
             {/* Scale Wrapper for Preview */}
             <div className="w-full max-w-[210mm] bg-white shadow-[0_0_100px_-20px_rgba(0,0,0,0.1)] min-h-[297mm] relative rounded-[20px] overflow-hidden" id="invoice-preview-content">
-                <div className="p-10 md:p-12 h-full flex flex-col justify-between min-h-[297mm]">
+                <div className="p-10 md:p-12 h-full flex flex-col justify-start gap-12 min-h-[297mm]">
                     <div>
                         {/* Header */}
                         <div className="flex justify-between items-start mb-10 relative">
@@ -47,6 +47,12 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                                     <p className="text-primary font-bold tracking-[0.2em] text-xs uppercase">{invoice.companyWebsite}</p>
                                     <p className="text-slate-400 text-xs max-w-xs">{invoice.companyAddress}</p>
                                 </div>
+                                {/* Sender Info Moved Here */}
+                                <div className="space-y-1 pt-4">
+                                    <p className="font-bold text-slate-900 text-base">{invoice.companyContact?.name}</p>
+                                    <p className="text-slate-500 text-sm">{invoice.companyContact?.email}</p>
+                                    <p className="text-slate-500 text-sm">{invoice.companyContact?.phone}</p>
+                                </div>
                             </div>
                             <div className="text-right">
                                 <h1 className="text-5xl font-black text-slate-100 leading-none mb-4 select-none">INVOICE</h1>
@@ -58,7 +64,7 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-8 mb-8">
+                        <div className="mb-8">
                             {/* Bill To */}
                             <div className="space-y-2">
                                 <h3 className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">Recipient</h3>
@@ -67,24 +73,18 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                                     <p className="text-slate-500 text-sm whitespace-pre-wrap leading-relaxed">{invoice.clientAddress}</p>
                                 </div>
                                 <div className="pt-2 space-y-1">
-                                    <p className="text-xs text-slate-400 flex items-center gap-2">
-                                        <span className="w-1 h-1 bg-slate-300 rounded-full" />
-                                        {invoice.clientContact?.email}
-                                    </p>
-                                    <p className="text-xs text-slate-400 flex items-center gap-2">
-                                        <span className="w-1 h-1 bg-slate-300 rounded-full" />
-                                        {invoice.clientContact?.phone}
-                                    </p>
-                                </div>
-                            </div>
-
-                            {/* Contact Info (From) */}
-                            <div className="space-y-2 text-right">
-                                <h3 className="text-primary text-[10px] font-black uppercase tracking-[0.2em]">Sender</h3>
-                                <div className="space-y-1">
-                                    <p className="font-bold text-slate-900 text-base">{invoice.companyContact?.name}</p>
-                                    <p className="text-slate-500 text-sm">{invoice.companyContact?.email}</p>
-                                    <p className="text-slate-500 text-sm">{invoice.companyContact?.phone}</p>
+                                    {invoice.clientContact?.email && (
+                                        <p className="text-xs text-slate-400 flex items-center gap-2">
+                                            <span className="w-1 h-1 bg-slate-300 rounded-full" />
+                                            {invoice.clientContact.email}
+                                        </p>
+                                    )}
+                                    {invoice.clientContact?.phone && (
+                                        <p className="text-xs text-slate-400 flex items-center gap-2">
+                                            <span className="w-1 h-1 bg-slate-300 rounded-full" />
+                                            {invoice.clientContact.phone}
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -104,15 +104,15 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                                     {invoice.items.map((item) => (
                                         <tr key={item.id} className="group">
                                             <td className="py-3">
-                                                <p className="font-bold text-slate-900 text-sm">{item.description}</p>
+                                                <p className="font-bold text-slate-900 text-sm whitespace-pre-wrap">{item.description}</p>
                                             </td>
-                                            <td className="py-3 text-center text-slate-500 font-bold text-sm">{item.quantity}</td>
-                                            <td className="py-3 text-right text-slate-500 font-bold text-sm">
+                                            <td className="py-3 text-center text-slate-500 font-bold text-sm h-fit align-top">{item.quantity}</td>
+                                            <td className="py-3 text-right text-slate-500 font-bold text-sm h-fit align-top">
                                                 {invoice.currencyPosition === 'before' && invoice.currency}
                                                 {item.price.toLocaleString()}
                                                 {invoice.currencyPosition === 'after' && ` ${invoice.currency}`}
                                             </td>
-                                            <td className="py-3 text-right font-black text-slate-900 text-sm">
+                                            <td className="py-3 text-right font-black text-slate-900 text-sm h-fit align-top">
                                                 {invoice.currencyPosition === 'before' && invoice.currency}
                                                 {(item.quantity * item.price).toLocaleString()}
                                                 {invoice.currencyPosition === 'after' && ` ${invoice.currency}`}
@@ -124,16 +124,16 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                         </div>
                     </div>
 
-                    {/* Footer / Total */}
+                    {/* Payment Info & Totals */}
                     <div className="space-y-8">
-                        <div className="flex justify-between items-start border-t-2 border-slate-900 pt-8">
-                            <div>
+                        <div className="flex justify-between items-end border-t-2 border-slate-900 pt-8">
+                            <div className="flex-1 mr-8">
                                 <h4 className="text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-4">Payment Info</h4>
-                                <div className="grid grid-cols-2 gap-x-8 gap-y-4">
+                                <div className="flex flex-col gap-4">
                                     {invoice.paymentMethods?.map((method) => (
-                                        <div key={method.id}>
-                                            <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{method.label}</p>
-                                            <p className="text-xs font-bold text-slate-700">{method.details}</p>
+                                        <div key={method.id} className="grid grid-cols-[100px_1fr] gap-4">
+                                            <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest pt-0.5">{method.label}</p>
+                                            <p className="text-xs font-bold text-slate-700 whitespace-pre-wrap">{method.details}</p>
                                         </div>
                                     ))}
                                 </div>
@@ -147,11 +147,12 @@ export const InvoicePreview = ({ invoice }: { invoice: Invoice }) => {
                                 </p>
                             </div>
                         </div>
+                    </div>
 
-                        <div className="flex justify-between items-center text-slate-400 text-[10px] font-black uppercase tracking-[0.3em]">
-                            <p>Thank you for your business</p>
-                            <p>© {new Date().getFullYear()} {invoice.companyName}</p>
-                        </div>
+                    {/* Bottom Footer */}
+                    <div className="flex justify-between items-center text-slate-400 text-[10px] font-black uppercase tracking-[0.3em] mt-auto">
+                        <p>Thank you for your business</p>
+                        <p>© {new Date().getFullYear()} {invoice.companyName}</p>
                     </div>
                 </div>
             </div>
